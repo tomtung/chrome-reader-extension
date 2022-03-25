@@ -10,9 +10,14 @@ import { stopWords } from "../libs/stopWords";
 export const fadeStopWords = content => {
   let fadedContent = content.split(" ");
   fadedContent.forEach((word, index) => {
-    if (stopWords.includes(word.toLowerCase())) {
-      fadedContent[index] = `<span class="rr-fade">${word}</span>`;
+    if (!word || /[<>=&]/.test(word) || /^[^a-zA-Z]+$/.test(word)) {
+      return;
     }
+    var boldLength = Math.ceil(word.length / 2);
+    if (stopWords.includes(word.toLowerCase())) {
+      boldLength = 1;
+    }
+    fadedContent[index] = `<b>${word.slice(0, boldLength)}</b>${word.slice(boldLength)}`;
   });
 
   return fadedContent.join(" ");
